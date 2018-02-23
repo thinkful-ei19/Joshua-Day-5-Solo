@@ -52,6 +52,25 @@ function handleNewItemSubmit(){
   });
 }
 
+function searchItemSubmit(itemName){
+  let searchArr = STORE.filter(item=>{
+    return (item.name === itemName);
+  }); 
+  return searchArr;
+}
+
+function handleSearchItemSubmit(){
+  console.log('Search run');
+  $('#js-search-by-name').submit(function (event){
+    console.log('is it working');
+    event.preventDefault();
+    const searchItem = $('.js-search-bar').val();
+    $('.js-search-bar').val('');
+    const searchArr = searchItemSubmit(searchItem);
+    renderShoppingList(searchArr);
+  });
+}
+
 function toggleCheckedForListItem(itemIndex){
   console.log('Toggling checked property for item at index ' + itemIndex);
   STORE[itemIndex].checked = !STORE[itemIndex].checked;
@@ -96,12 +115,12 @@ function hideCheckedItems(){
 
 function handleToggleHideChecked(){
   $('.js-toggle-switch').on('change', event =>{
-      if($('input[type=checkbox]').prop('checked')){
-        console.log('checked'); 
-        hideCheckedItems();
-      } else {
-        renderShoppingList(STORE);
-        console.log('unchecked');
+    if($('input[type=checkbox]').prop('checked')){
+      console.log('checked'); 
+      hideCheckedItems();
+    } else {
+      renderShoppingList(STORE);
+      console.log('unchecked');
     }
     
   });
@@ -112,7 +131,8 @@ function handleShoppingList(){
   handleNewItemSubmit();
   handleItemCheckClicked();
   handleDeleteItemClicked();
-  handleToggleHideChecked();    
+  handleToggleHideChecked(); 
+  handleSearchItemSubmit();   
 }
 
 $(handleShoppingList);
