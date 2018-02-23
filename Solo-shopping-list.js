@@ -71,6 +71,13 @@ function handleSearchItemSubmit(){
   });
 }
 
+function resetList(){
+    console.log('reset');
+    $('.js-reset-button').on('click', event =>{
+        renderShoppingList(STORE);
+    });
+}
+
 function toggleCheckedForListItem(itemIndex){
   console.log('Toggling checked property for item at index ' + itemIndex);
   STORE[itemIndex].checked = !STORE[itemIndex].checked;
@@ -132,7 +139,8 @@ function handleShoppingList(){
   handleItemCheckClicked();
   handleDeleteItemClicked();
   handleToggleHideChecked(); 
-  handleSearchItemSubmit();   
+  handleSearchItemSubmit();
+  resetList();   
 }
 
 $(handleShoppingList);
