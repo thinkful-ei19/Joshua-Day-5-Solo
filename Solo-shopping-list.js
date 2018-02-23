@@ -1,11 +1,11 @@
 'use strict';
 
 const STORE = [
-    {name: 'apples', checked: false},
-    {name: 'oranges', checked: false},
-    {name: 'milk', checked: true},
-    {name: 'bread', checked: false}
-  ];
+  {name: 'apples', checked: false},
+  {name: 'oranges', checked: false},
+  {name: 'milk', checked: true},
+  {name: 'bread', checked: false}
+];
 
 function generateItemElement(item, itemIndex, template) {
   return `
@@ -90,14 +90,20 @@ function hideCheckedItems(){
   let unmarkedItems= STORE.filter(item=>{
     return item.checked === false;
   }); 
- console.log(unmarkedItems);
+  console.log(unmarkedItems);
   renderShoppingList(unmarkedItems);
 }
 
 function handleToggleHideChecked(){
   $('.js-toggle-switch').on('change', event =>{
-    console.log('handleToggleHideChecked ran'); 
-    hideCheckedItems();
+      if($('input[type=checkbox]').prop('checked')){
+        console.log('checked'); 
+        hideCheckedItems();
+      } else {
+        renderShoppingList(STORE);
+        console.log('unchecked');
+    }
+    
   });
 }
 
