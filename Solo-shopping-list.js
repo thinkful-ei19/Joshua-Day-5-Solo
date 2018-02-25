@@ -20,7 +20,7 @@ function generateItemElement(item, itemIndex, template) {
       <button class="shopping-item-delete js-item-delete">
           <span class="button-label">delete</span>
       </button>
-      <form id="js-edit-item-name">
+      <form class="js-edit-item-name">
       <label for="edit-item-name">Edit item name</label>
       <input type="text" name="edit-bar" class="js-edit-bar" placeholder="Type here">
       <button class="submit-edit js-submit-edit">
@@ -60,16 +60,21 @@ function handleNewItemSubmit(){
   });
 }
 
-function itemEdit(itemName){
-STORE.items.push({name: itemName, checked: false});
+function itemEdit(itemName, currentIndex){
+STORE.items[currentIndex].name=itemName;
 }
 
 function handleEditItemName(){
-  $('#js-edit-item-name').submit(function (event){
+  console.log('edit run');
+  $('.js-shopping-list').on('submit', '.js-edit-item-name', function (event){
     event.preventDefault();
-    const newNameEdit = $('.js-edit-bar').val();
+    const currentIndex= $(event.currentTarget).parents('li').attr('data-item-index');
+    console.log(currentIndex);
+    console.log(event.currentTarget);
+    const newNameEdit = $(event.currentTarget).find('.js-edit-bar').val();
+    console.log(newNameEdit);
 $('.js-edit-bar').val('');
-    itemEdit(newNameEdit);
+    itemEdit(newNameEdit, currentIndex);
     renderShoppingList(STORE.items); 
   });
 }
