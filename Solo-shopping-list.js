@@ -72,10 +72,10 @@ function handleSearchItemSubmit(){
 }
 
 function resetList(){
-    console.log('reset');
-    $('.js-reset-button').on('click', event =>{
-        renderShoppingList(STORE);
-    });
+  console.log('reset');
+  $('.js-reset-button').on('click', event =>{
+    renderShoppingList(STORE);
+  });
 }
 
 function toggleCheckedForListItem(itemIndex){
