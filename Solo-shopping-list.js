@@ -1,11 +1,13 @@
 'use strict';
 
-const STORE = [
-  {name: 'apples', checked: false},
-  {name: 'oranges', checked: false},
-  {name: 'milk', checked: true},
-  {name: 'bread', checked: false}
-];
+const STORE = {
+  items: [
+    {name: 'apples', checked: false},
+    {name: 'oranges', checked: false},
+    {name: 'milk', checked: true},
+    {name: 'bread', checked: false}
+  ],
+};
 
 function generateItemElement(item, itemIndex, template) {
   return `
@@ -18,6 +20,12 @@ function generateItemElement(item, itemIndex, template) {
       <button class="shopping-item-delete js-item-delete">
           <span class="button-label">delete</span>
       </button>
+      <form id="js-edit-item-name">
+      <label for="edit-item-name">Edit item name</label>
+      <input type="text" name="edit-bar" class="js-edit-bar" placeholder="Type here">
+      <button class="submit-edit js-submit-edit">
+          <span class="button-label">submit</span>
+      </form>
     </div>
   </li>`; 
 }
@@ -38,7 +46,7 @@ function renderShoppingList(list){
 
 function addItemToShoppingList(itemName) {
   console.log(`Adding "${itemName}" to shopping list`);
-  STORE.push({name: itemName, checked: false});
+  STORE.items.push({name: itemName, checked: false});
 }
 
 function handleNewItemSubmit(){
@@ -48,12 +56,27 @@ function handleNewItemSubmit(){
     const newItemName = $('.js-shopping-list-entry').val();
     $('.js-shopping-list-entry').val('');
     addItemToShoppingList(newItemName);
-    renderShoppingList(STORE);
+    renderShoppingList(STORE.items);
   });
 }
 
+function itemEdit(itemName){
+STORE.items.push({name: itemName, checked: false});
+}
+
+function handleEditItemName(){
+  $('#js-edit-item-name').submit(function (event){
+    event.preventDefault();
+    const newNameEdit = $('.js-edit-bar').val();
+$('.js-edit-bar').val('');
+    itemEdit(newNameEdit);
+    renderShoppingList(STORE.items); 
+  });
+}
+
+
 function searchItemSubmit(itemName){
-  let searchArr = STORE.filter(item=>{
+  let searchArr = STORE.items.filter(item=>{
     return (item.name === itemName);
   }); 
   return searchArr;
@@ -74,13 +97,13 @@ function handleSearchItemSubmit(){
 function resetList(){
   console.log('reset');
   $('.js-reset-button').on('click', event =>{
-    renderShoppingList(STORE);
+    renderShoppingList(STORE.items);
   });
 }
 
 function toggleCheckedForListItem(itemIndex){
   console.log('Toggling checked property for item at index ' + itemIndex);
-  STORE[itemIndex].checked = !STORE[itemIndex].checked;
+  STORE.items[itemIndex].checked = !STORE.items[itemIndex].checked;
 }
 
 function getItemIndexFromElement(item){
@@ -95,25 +118,25 @@ function handleItemCheckClicked(){
     console.log('`handleItemCheckClicked` ran');
     const itemIndex = getItemIndexFromElement(event.currentTarget);
     toggleCheckedForListItem(itemIndex);
-    renderShoppingList(STORE);
+    renderShoppingList(STORE.items);
   });
 }
 
 function deleteItem(itemIndex){
-  STORE.splice(itemIndex, 1);
+  STORE.items.splice(itemIndex, 1);
 }
 
 function handleDeleteItemClicked(){
   $('.js-shopping-list').on('click', '.js-item-delete', event =>{
     const itemIndex = getItemIndexFromElement(event.currentTarget);
     deleteItem(itemIndex);
-    renderShoppingList(STORE);
+    renderShoppingList(STORE.items);
     console.log('`handleDeleteItemClicked` ran');
   });
 }
 
 function hideCheckedItems(){
-  let unmarkedItems= STORE.filter(item=>{
+  let unmarkedItems= STORE.items.filter(item=>{
     return item.checked === false;
   }); 
   console.log(unmarkedItems);
@@ -126,21 +149,24 @@ function handleToggleHideChecked(){
       console.log('checked'); 
       hideCheckedItems();
     } else {
-      renderShoppingList(STORE);
+      renderShoppingList(STORE.items);
       console.log('unchecked');
     }
     
   });
 }
 
+
+
 function handleShoppingList(){
-  renderShoppingList(STORE);
+  renderShoppingList(STORE.items);
   handleNewItemSubmit();
   handleItemCheckClicked();
   handleDeleteItemClicked();
   handleToggleHideChecked(); 
   handleSearchItemSubmit();
   resetList();   
+  handleEditItemName();
 }
 
 $(handleShoppingList);
